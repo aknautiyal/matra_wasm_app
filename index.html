@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Matra Analysis</title>
+    <script type="module">
+        // Make sure the script is loaded before trying to access the run function
+        console.log("Script loaded!");
+
+        import init, { analyze_text } from "./pkg/matra_wasm_app.js";
+
+        // Define the async run function to handle the analysis
+        async function run(event) {
+            event.preventDefault();  // Prevent form submission if the button is part of a form
+            console.log("Run function triggered");
+
+            await init();  // Initialize the WASM module
+
+            // Get input value from the textarea
+            const input = document.getElementById("input").value;
+
+	    // Split by lines, ignoring empty ones
+	    const lines = input.split("\n").filter(line => line.trim() !== "");
+
+            // Call the analyze_text function from Rust and get the result
+            const result = analyze_text(lines);  
+
+            // Display the result in the <pre> tag
+            document.getElementById("output").textContent = result;  
+        }
+
+        // Ensuring that the DOM content is fully loaded before adding event listener
+        window.onload = () => {
+            document.getElementById("analyze-button").addEventListener("click", run);
+        };
+    </script>
+</head>
+<body>
+    <h1>Matra Analysis</h1>
+    <!-- Textarea for input -->
+    <textarea id="input" rows="4" cols="50"></textarea><br>
+
+    <!-- Button to trigger the run function -->
+    <button id="analyze-button" type="button">Analyze</button>
+
+    <!-- Where the result will be displayed -->
+    <pre id="output"></pre>
+</body>
+</html>
