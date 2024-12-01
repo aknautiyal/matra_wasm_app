@@ -6,7 +6,8 @@ pub fn analyze_text(lines: Vec<String>) -> String {
     let mut results = String::new();
     for (i, line) in lines.iter().enumerate() {
         let charan = Charan::from_str(&line);
-        results.push_str(&format!("Line {}: {}\nAnalysis: {}\n", i + 1, line, charan.analysis()));
+        let (akshar_analysis, matra_analysis) = charan.analysis();
+        results.push_str(&format!("Line {}: {}\nVarns: {}\nMatras: {}\n\n", i + 1, line, akshar_analysis, matra_analysis));
     }
     results
 }
